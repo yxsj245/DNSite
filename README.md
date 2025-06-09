@@ -1,6 +1,7 @@
 # 资源下载站
 
 一个基于 TypeScript + Python + Docker 的现代化资源下载站，支持赞助者验证和下载限速功能。
+![image](https://github.com/user-attachments/assets/9a4f3156-21a2-41e1-9cea-8b65b308e542)
 
 ## 功能特性
 
