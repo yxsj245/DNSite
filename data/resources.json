@@ -1,0 +1,32 @@
+[
+  {
+    "file_path": "/app/files/jdk/Linux/openjdk-16+36_linux-x64_bin.tar.gz",
+    "display_name": "Linux|openjdk-16+36_linux-x64_bin.tar.gz",
+    "category": ["运行环境","JDK"],
+    "description": "适用于Linux环境的集成JDK文件包，可通过/bin/java 进行快速调用，无需安装"
+  },
+  {
+    "file_path": "/app/files/jdk/Linux/openjdk-17.0.0.1+2_linux-x64_bin.tar.gz",
+    "display_name": "Linux|openjdk-17.0.0.1+2_linux-x64_bin.tar.gz",
+    "category": ["运行环境","JDK"],
+    "description": "适用于Linux环境的集成JDK文件包，可通过/bin/java 进行快速调用，无需安装"
+  },
+  {
+    "file_path": "/app/files/jdk/Linux/openjdk-21+35_linux-x64_bin.tar.gz",
+    "display_name": "Linux|openjdk-21+35_linux-x64_bin.tar.gz",
+    "category": ["运行环境","JDK"],
+    "description": "适用于Linux环境的集成JDK文件包，可通过/bin/java 进行快速调用，无需安装"
+  },
+  {
+    "file_path": "/app/files/jdk/Linux/openjdk-24+36_linux-x64_bin.tar.gz",
+    "display_name": "Linux|openjdk-24+36_linux-x64_bin.tar.gz",
+    "category": ["运行环境","JDK"],
+    "description": "适用于Linux环境的集成JDK文件包，可通过/bin/java 进行快速调用，无需安装"
+  },
+  {
+    "file_path": "/app/files/jdk/Linux/openjdk-7u75-b13-linux-x64-18_dec_2014.tar.gz",
+    "display_name": "Linux|openjdk-7u75-b13-linux-x64-18_dec_2014.tar.gz",
+    "category": ["运行环境","JDK"],
+    "description": "适用于Linux环境的集成JDK文件包，可通过/bin/java 进行快速调用，无需安装"
+  }
+]

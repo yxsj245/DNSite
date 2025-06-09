@@ -1,0 +1,22 @@
+[
+  {
+    "name": "技术资源站",
+    "description": "提供最新的技术文档、开发工具和编程资源，助力开发者快速成长。",
+    "url": "https://example-tech.com"
+  },
+  {
+    "name": "设计素材库",
+    "description": "海量高质量设计素材，包括图标、字体、模板等，满足各种设计需求。",
+    "url": "https://example-design.com"
+  },
+  {
+    "name": "学习平台",
+    "description": "在线学习平台，提供丰富的课程资源和学习工具。",
+    "url": "https://example-learn.com"
+  },
+  {
+    "name": "工具集合",
+    "description": "实用工具集合站，包含各种在线工具和实用软件推荐。",
+    "url": "https://example-tools.com"
+  }
+]

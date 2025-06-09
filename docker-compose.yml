@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: download-station-app
+    ports:
+      - "5000:5000"
+      - "80:5000"  # 将80端口也映射到应用
+    volumes:
+      - /disk2/kodbox/disk1:/app/files  # 挂载文件目录
+      - ./resources.json:/app/resources.json  # 挂载资源配置
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    networks:
+      - download-network
+
+volumes:
+  files_data:
+    driver: local
+
+networks:
+  download-network:
+    driver: bridge
