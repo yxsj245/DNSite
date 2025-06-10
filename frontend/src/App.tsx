@@ -26,6 +26,7 @@ function App() {
   const [allResourceIds, setAllResourceIds] = useState<number[]>([])
   const [trafficStats, setTrafficStats] = useState<DownloadStats | null>(null)
   const [allCategories, setAllCategories] = useState<string[]>([])
+  const [categoryCounts, setCategoryCounts] = useState<{ [key: string]: number }>({})
 
   useEffect(() => {
     loadSponsorKey()
@@ -195,6 +196,10 @@ function App() {
       // 设置所有分类数据
       if (data.categories) {
         setAllCategories(data.categories)
+      }
+      // 设置分类数量数据
+      if (data.category_counts) {
+        setCategoryCounts(data.category_counts)
       }
       
       // 生成当前页面资源的全局ID映射
@@ -392,17 +397,10 @@ function App() {
     return Array.from(subCategories).sort()
   }
 
-  // 获取分类下的资源数量（注意：这里显示的是当前搜索条件下的总数量，不是当前页面的数量）
+  // 获取分类下的资源数量（使用后端返回的准确数量）
   const getCategoryCount = (category: string) => {
-    // 如果是"全部"分类，返回总数量
-    if (category === '全部') {
-      return pagination.total
-    }
-    // 对于其他分类，由于我们只有当前页面的数据，这里的计数可能不准确
-    // 理想情况下应该从后端获取每个分类的准确计数
-    return resources.filter(resource => 
-      resource.category && resource.category.includes(category)
-    ).length
+    // 使用后端返回的准确分类数量
+    return categoryCounts[category] || 0
   }
 
   // 当筛选条件改变时重置页码
@@ -531,7 +529,7 @@ function App() {
               </div>
               {searchKeyword && (
                 <div className="mt-2 text-sm text-gray-500">
-                  搜索关键词："{searchKeyword}" ({pagination.total} 个结果)
+                  搜索关键词："{searchKeyword}" ({getCategoryCount('全部')} 个结果)
                 </div>
               )}
             </div>
@@ -555,7 +553,7 @@ function App() {
                   >
                     <Filter className="w-4 h-4 mb-1" />
                     <span className="text-center">全部</span>
-                    <span className="text-xs opacity-75">({pagination.total})</span>
+                    <span className="text-xs opacity-75">({getCategoryCount('全部')})</span>
                   </button>
                 </div>
                 
@@ -612,7 +610,7 @@ function App() {
                 })}
               </div>
               <div className="mt-3 text-sm text-gray-500">
-                当前显示：{selectedCategory} ({pagination.total} 个资源)
+                当前显示：{selectedCategory} ({getCategoryCount(selectedCategory)} 个资源)
               </div>
             </div>
           </div>

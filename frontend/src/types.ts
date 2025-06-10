@@ -19,6 +19,7 @@ export interface ResourceResponse {
     pages: number
   }
   categories: string[]
+  category_counts: { [key: string]: number }
 }
 
 export interface VerifyKeyResponse {

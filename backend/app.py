@@ -271,6 +271,30 @@ def get_resources():
     end = start + per_page
     paginated_resources = filtered_resources[start:end]
     
+    # 计算每个分类的资源数量（基于当前搜索条件）
+    category_counts = {}
+    
+    # 获取所有一级分类
+    all_categories = list(set([r['category'][0] for r in resources if r['category'] and len(r['category']) > 0]))
+    
+    # 为每个分类计算数量（基于当前搜索条件，不包括分类过滤）
+    base_filtered_resources = resources
+    if search:
+        search_lower = search.lower()
+        base_filtered_resources = [
+            r for r in base_filtered_resources 
+            if search_lower in r['display_name'].lower() or 
+               search_lower in r['description'].lower() or 
+               any(search_lower in cat.lower() for cat in r['category'])
+        ]
+    
+    # 计算每个分类的数量
+    for cat in all_categories:
+        category_counts[cat] = len([r for r in base_filtered_resources if cat in r['category']])
+    
+    # 添加"全部"分类的数量
+    category_counts['全部'] = len(base_filtered_resources)
+    
     return jsonify({
         'resources': paginated_resources,
         'pagination': {
@@ -279,7 +303,8 @@ def get_resources():
             'total': total,
             'pages': (total + per_page - 1) // per_page
         },
-        'categories': list(set([r['category'][0] for r in resources if r['category'] and len(r['category']) > 0]))
+        'categories': all_categories,
+        'category_counts': category_counts
     })
 
 @app.route('/api/download/<int:resource_id>', methods=['GET'])
