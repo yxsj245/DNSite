@@ -8,7 +8,6 @@ services:
     container_name: download-station-app
     ports:
       - "5000:5000"
-      - "80:5000"  # 将80端口也映射到应用
     volumes:
       - /disk2/kodbox/disk1:/app/files  # 挂载文件目录
       - ./resources.json:/app/resources.json  # 挂载资源配置

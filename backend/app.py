@@ -16,13 +16,16 @@ CORS(app)
 # 全局变量
 ip_download_stats = defaultdict(lambda: {'last_reset': time.time(), 'bytes_downloaded': 0})
 ip_download_count = defaultdict(lambda: {'last_reset': time.time(), 'download_count': 0})
+ip_concurrent_downloads = defaultdict(int)  # 跟踪每个IP的并发下载数
 # 从文件加载统计数据，如果文件不存在则使用默认值
 total_traffic_stats = None  # 将在应用启动时初始化
 stats_lock = Lock()
+concurrent_lock = Lock()  # 并发下载锁
 
 # 配置
 MAX_SPEED_MBPS = 10  # 非赞助者最大下载速度 10Mbps
 MAX_DOWNLOADS_PER_HOUR = 5  # 非赞助者每小时最大下载次数
+MAX_CONCURRENT_DOWNLOADS_PER_IP = 1  # 非赞助者每IP最大并发下载数
 CHUNK_SIZE = 8192  # 8KB chunks
 VERIFY_URL = "http://82.156.35.55:5001/verify"
 
@@ -110,6 +113,33 @@ def verify_sponsor_key(key, client_ip):
     except:
         return False
 
+def check_concurrent_download_limit(client_ip, is_sponsor):
+    """检查并发下载限制"""
+    if is_sponsor:
+        return True  # 赞助者无限制
+    
+    with concurrent_lock:
+        current_concurrent = ip_concurrent_downloads[client_ip]
+        if current_concurrent >= MAX_CONCURRENT_DOWNLOADS_PER_IP:
+            return False
+        return True
+
+def increment_concurrent_download(client_ip, is_sponsor):
+    """增加并发下载计数"""
+    if not is_sponsor:
+        with concurrent_lock:
+            ip_concurrent_downloads[client_ip] += 1
+
+def decrement_concurrent_download(client_ip, is_sponsor):
+    """减少并发下载计数"""
+    if not is_sponsor:
+        with concurrent_lock:
+            if ip_concurrent_downloads[client_ip] > 0:
+                ip_concurrent_downloads[client_ip] -= 1
+                # 如果计数为0，从字典中删除该IP记录以节省内存
+                if ip_concurrent_downloads[client_ip] == 0:
+                    del ip_concurrent_downloads[client_ip]
+
 def check_and_increment_download_limit(client_ip, is_sponsor):
     """检查下载次数限制并增加计数"""
     if is_sponsor:
@@ -156,31 +186,35 @@ def calculate_speed_limit(client_ip, is_sponsor):
 def controlled_file_stream(file_path, client_ip, is_sponsor):
     """控制下载速度的文件流"""
     def generate():
-        with open(file_path, 'rb') as f:
-            while True:
-                chunk = f.read(CHUNK_SIZE)
-                if not chunk:
-                    break
-                
-                # 更新流量统计（所有用户都统计）
-                with stats_lock:
-                    total_traffic_stats['total_bytes'] += len(chunk)
-                    # 每传输1MB数据保存一次统计（避免频繁写文件）
-                    if total_traffic_stats['total_bytes'] % (1024 * 1024) == 0:
-                        save_traffic_stats(total_traffic_stats)
-                
-                if not is_sponsor:
-                    # 计算延迟以控制速度
-                    max_bytes_per_second = calculate_speed_limit(client_ip, is_sponsor)
-                    if max_bytes_per_second:
-                        delay = len(chunk) / max_bytes_per_second
-                        time.sleep(delay)
+        try:
+            with open(file_path, 'rb') as f:
+                while True:
+                    chunk = f.read(CHUNK_SIZE)
+                    if not chunk:
+                        break
                     
-                    # 更新IP下载统计（仅非赞助者）
+                    # 更新流量统计（所有用户都统计）
                     with stats_lock:
-                        ip_download_stats[client_ip]['bytes_downloaded'] += len(chunk)
-                
-                yield chunk
+                        total_traffic_stats['total_bytes'] += len(chunk)
+                        # 每传输1MB数据保存一次统计（避免频繁写文件）
+                        if total_traffic_stats['total_bytes'] % (1024 * 1024) == 0:
+                            save_traffic_stats(total_traffic_stats)
+                    
+                    if not is_sponsor:
+                        # 计算延迟以控制速度
+                        max_bytes_per_second = calculate_speed_limit(client_ip, is_sponsor)
+                        if max_bytes_per_second:
+                            delay = len(chunk) / max_bytes_per_second
+                            time.sleep(delay)
+                        
+                        # 更新IP下载统计（仅非赞助者）
+                        with stats_lock:
+                            ip_download_stats[client_ip]['bytes_downloaded'] += len(chunk)
+                    
+                    yield chunk
+        finally:
+            # 下载完成或中断时，减少并发计数
+            decrement_concurrent_download(client_ip, is_sponsor)
     
     return generate()
 
@@ -245,7 +279,7 @@ def get_resources():
             'total': total,
             'pages': (total + per_page - 1) // per_page
         },
-        'categories': list(set([cat for r in resources for cat in r['category']]))
+        'categories': list(set([r['category'][0] for r in resources if r['category'] and len(r['category']) > 0]))
     })
 
 @app.route('/api/download/<int:resource_id>', methods=['GET'])
@@ -272,6 +306,14 @@ def download_resource(resource_id):
     if sponsor_key:
         is_sponsor = verify_sponsor_key(sponsor_key, client_ip)
     
+    # 检查并发下载限制
+    if not check_concurrent_download_limit(client_ip, is_sponsor):
+        return jsonify({
+            'error': f'并发下载数已达上限，非赞助用户每IP最多同时下载{MAX_CONCURRENT_DOWNLOADS_PER_IP}个文件',
+            'current_concurrent': ip_concurrent_downloads.get(client_ip, 0),
+            'max_concurrent': MAX_CONCURRENT_DOWNLOADS_PER_IP
+        }), 429
+    
     # 检查下载次数限制
     if not check_and_increment_download_limit(client_ip, is_sponsor):
         with stats_lock:
@@ -282,6 +324,9 @@ def download_resource(resource_id):
             'error': f'下载次数已达上限，非赞助用户每小时最多下载{MAX_DOWNLOADS_PER_HOUR}次',
             'remaining_time': f'{remaining_minutes}分钟后重置'
         }), 429
+    
+    # 增加并发下载计数
+    increment_concurrent_download(client_ip, is_sponsor)
     
     # 获取文件信息
     file_size = os.path.getsize(file_path)
@@ -328,10 +373,19 @@ def get_stats():
         count_stats = dict(ip_download_count)
         total_stats = dict(total_traffic_stats)
     
+    # 获取并发下载统计
+    with concurrent_lock:
+        concurrent_stats = dict(ip_concurrent_downloads)
+    
     return jsonify({
         'active_downloads': len(stats),
         'total_ips': len(stats),
         'download_counts': len(count_stats),
+        'concurrent_downloads': {
+            'total_concurrent': sum(concurrent_stats.values()),
+            'ips_downloading': len(concurrent_stats),
+            'max_per_ip': MAX_CONCURRENT_DOWNLOADS_PER_IP
+        },
         'total_traffic': {
             'total_bytes': total_stats['total_bytes'],
             'total_downloads': total_stats['total_downloads'],

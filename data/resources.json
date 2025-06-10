@@ -1,11 +1,5 @@
 [
   {
-    "file_path": "/app/files/jdk/Linux/openjdk-16+36_linux-x64_bin.tar.gz",
-    "display_name": "Linux|openjdk-16+36_linux-x64_bin.tar.gz",
-    "category": ["运行环境","JDK"],
-    "description": "适用于Linux环境的集成JDK文件包，可通过/bin/java 进行快速调用，无需安装"
-  },
-  {
     "file_path": "/app/files/jdk/Linux/openjdk-17.0.0.1+2_linux-x64_bin.tar.gz",
     "display_name": "Linux|openjdk-17.0.0.1+2_linux-x64_bin.tar.gz",
     "category": ["运行环境","JDK"],
@@ -28,5 +22,138 @@
     "display_name": "Linux|openjdk-7u75-b13-linux-x64-18_dec_2014.tar.gz",
     "category": ["运行环境","JDK"],
     "description": "适用于Linux环境的集成JDK文件包，可通过/bin/java 进行快速调用，无需安装"
+  },
+  {
+    "file_path": "/app/files/jdk/Windows/openjdk-8u44-windows-i586.zip",
+    "display_name": "Windows|openjdk-8u44-windows-i586.zip",
+    "category": ["运行环境","JDK"],
+    "description": "适用于Windows环境的集成JDK文件包，可通过/bin/java.exe 进行快速调用，无需安装"
+  },
+  {
+    "file_path": "/app/files/jdk/Windows/openjdk-24+36_windows-x64_bin.zip",
+    "display_name": "Windows|openjdk-24+36_windows-x64_bin.zip",
+    "category": ["运行环境","JDK"],
+    "description": "适用于Windows环境的集成JDK文件包，可通过/bin/java.exe 进行快速调用，无需安装"
+  },
+  {
+    "file_path": "/app/files/jdk/Windows/openjdk-21+35_windows-x64_bin.zip",
+    "display_name": "Windows|openjdk-21+35_windows-x64_bin.zip",
+    "category": ["运行环境","JDK"],
+    "description": "适用于Windows环境的集成JDK文件包，可通过/bin/java.exe 进行快速调用，无需安装"
+  },
+  {
+    "file_path": "/app/files/jdk/Windows/openjdk-17.0.0.1+2_windows-x64_bin.zip",
+    "display_name": "Windows|openjdk-17.0.0.1+2_windows-x64_bin.zip",
+    "category": ["运行环境","JDK"],
+    "description": "适用于Windows环境的集成JDK文件包，可通过/bin/java.exe 进行快速调用，无需安装"
+  },
+  {
+    "file_path": "/app/files/jdk/Windows/openjdk-12+32_windows-x64_bin.zip",
+    "display_name": "Windows|openjdk-12+32_windows-x64_bin.zip",
+    "category": ["运行环境","JDK"],
+    "description": "适用于Windows环境的集成JDK文件包，可通过/bin/java.exe 进行快速调用，无需安装"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Paper/Minecraft1201withPaper.zip",
+    "display_name": "1.20.1Paper|Minecraft1201withPaper.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Paper/Minecraft1202withPaper.zip",
+    "display_name": "1.20.2Paper|Minecraft1202withPaper.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Paper/Minecraft1204withPaper.zip",
+    "display_name": "1.20.4Paper|Minecraft1204withPaper.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Paper/Minecraft1205withPaper.zip",
+    "display_name": "1.20.5Paper|Minecraft1205withPaper.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Paper/Minecraft1206withPaper.zip",
+    "display_name": "1.20.6Paper|Minecraft1206withPaper.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Paper/Minecraft120withPaper.zip",
+    "display_name": "1.20Paper|Minecraft120withPaper.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Purpur/Minecraft1201withPurpur.zip",
+    "display_name": "1.20.1Purpur|Minecraft1201withPurpur.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Purpur/Minecraft1202withPurpur.zip",
+    "display_name": "1.20.2Purpur|Minecraft1202withPurpur.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Purpur/Minecraft1204withPurpur.zip",
+    "display_name": "1.20.4Purpur|Minecraft1204withPurpur.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Purpur/Minecraft1206withPurpur.zip",
+    "display_name": "1.20.6Purpur|Minecraft1206withPurpur.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Purpur/Minecraft120withPurpur.zip",
+    "display_name": "1.20Purpur|Minecraft120withPurpur.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Purpur/Minecraft1211withPurpur.zip",
+    "display_name": "1.21.1Purpur|Minecraft1211withPurpur.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Purpur/Minecraft1213withPurpur.zip",
+    "display_name": "1.21.3Purpur|Minecraft1213withPurpur.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Purpur/Minecraft1214withPurpur.zip",
+    "display_name": "1.21.4Purpur|Minecraft1214withPurpur.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Purpur/Minecraft1215withPurpur.zip",
+    "display_name": "1.21.5Purpur|Minecraft1215withPurpur.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/MC内容/整合包/原版/Purpur/Minecraft121withPurpur.zip",
+    "display_name": "1.21.0Purpur|Minecraft121withPurpur.zip",
+    "category": ["游戏资源","Minecraft整合包"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
+  },
+  {
+    "file_path": "/app/files/Docker/GSM面板/gameservermanager.tar.xz",
+    "display_name": "GameServerManager|gameservermanager.tar.xz",
+    "category": ["Docker","离线镜像"],
+    "description": "我的世界Java核心整合包，适用于中国大陆网络环境外网不畅通造成的无法下载核心文件"
   }
+  
 ]

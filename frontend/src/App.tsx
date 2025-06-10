@@ -25,6 +25,7 @@ function App() {
   const [pagination, setPagination] = useState({ page: 1, per_page: 20, total: 0, pages: 0 })
   const [allResourceIds, setAllResourceIds] = useState<number[]>([])
   const [trafficStats, setTrafficStats] = useState<DownloadStats | null>(null)
+  const [allCategories, setAllCategories] = useState<string[]>([])
 
   useEffect(() => {
     loadSponsorKey()
@@ -191,7 +192,10 @@ function App() {
       
       setResources(data.resources)
       setPagination(data.pagination)
-      // 分类数据现在通过getMainCategories()函数动态获取
+      // 设置所有分类数据
+      if (data.categories) {
+        setAllCategories(data.categories)
+      }
       
       // 生成当前页面资源的全局ID映射
       const startIndex = (data.pagination.page - 1) * data.pagination.per_page
@@ -346,6 +350,8 @@ function App() {
         return <Music className="w-3.5 h-3.5" />
       case '软件工具':
         return <Settings className="w-3.5 h-3.5" />
+      case 'Docker':
+        return <Image className="w-3.5 h-3.5" /> // Docker图标
       default:
         return <Image className="w-3.5 h-3.5" />
     }
@@ -363,20 +369,16 @@ function App() {
         return 'bg-green-100 text-green-800'
       case '多媒体':
         return 'bg-orange-100 text-orange-800'
+      case 'Docker':
+        return 'bg-blue-100 text-blue-800'
       default:
         return 'bg-gray-100 text-gray-800'
     }
   }
 
-  // 获取一级分类列表（去重）
+  // 获取一级分类列表（使用后端返回的完整分类列表）
   const getMainCategories = () => {
-    const mainCategories = new Set<string>()
-    resources.forEach(resource => {
-      if (resource.category && resource.category.length > 0) {
-        mainCategories.add(resource.category[0])
-      }
-    })
-    return Array.from(mainCategories).sort()
+    return allCategories.sort()
   }
 
   // 获取指定一级分类下的所有二级分类
@@ -390,8 +392,14 @@ function App() {
     return Array.from(subCategories).sort()
   }
 
-  // 获取分类下的资源数量
+  // 获取分类下的资源数量（注意：这里显示的是当前搜索条件下的总数量，不是当前页面的数量）
   const getCategoryCount = (category: string) => {
+    // 如果是"全部"分类，返回总数量
+    if (category === '全部') {
+      return pagination.total
+    }
+    // 对于其他分类，由于我们只有当前页面的数据，这里的计数可能不准确
+    // 理想情况下应该从后端获取每个分类的准确计数
     return resources.filter(resource => 
       resource.category && resource.category.includes(category)
     ).length
@@ -534,21 +542,19 @@ function App() {
                 <Filter className="w-4 h-4 text-primary-600 mr-2" />
                 <h2 className="text-base font-semibold text-gray-900">资源分类</h2>
               </div>
-              <div className="space-y-1">
+              <div className="grid grid-cols-4 gap-3">
                 {/* 全部分类按钮 */}
                 <div className="relative group">
                   <button
                     onClick={() => handleCategorySelect('全部')}
-                    className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    className={`w-full flex flex-col items-center justify-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                       selectedCategory === '全部'
                         ? 'bg-primary-600 text-white shadow-md'
                         : 'bg-gray-50 text-gray-700 hover:bg-gray-100 hover:shadow-sm'
                     }`}
                   >
-                    <span className="flex items-center">
-                      <Filter className="w-4 h-4 mr-2" />
-                      全部
-                    </span>
+                    <Filter className="w-4 h-4 mb-1" />
+                    <span className="text-center">全部</span>
                     <span className="text-xs opacity-75">({pagination.total})</span>
                   </button>
                 </div>
@@ -562,17 +568,17 @@ function App() {
                     <div key={mainCategory} className="relative group">
                       <button
                         onClick={() => handleCategorySelect(mainCategory)}
-                        className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        className={`w-full flex flex-col items-center justify-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                           selectedCategory === mainCategory
                             ? 'bg-primary-600 text-white shadow-md'
                             : 'bg-gray-50 text-gray-700 hover:bg-gray-100 hover:shadow-sm'
                         }`}
                       >
-                        <span className="flex items-center">
+                        <div className="flex flex-col items-center">
                           {getCategoryIcon(mainCategory)}
-                          <span className="ml-2">{mainCategory}</span>
-                        </span>
-                        <span className="text-xs opacity-75">({categoryCount})</span>
+                          <span className="mt-1 text-center">{mainCategory}</span>
+                          <span className="text-xs opacity-75">({categoryCount})</span>
+                        </div>
                       </button>
                       
                       {/* 二级标签悬停展示 */}
@@ -857,7 +863,7 @@ function App() {
                           )}
                           
                           {/* 下载限制提示 */}
-                          <div className="text-xs text-gray-500 bg-white rounded p-2 border">
+                          <div className="text-xs text-gray-500 bg-white rounded p-2">
                             {isKeyVerified ? (
                               <span className="text-green-600 flex items-center">
                                 <CheckCircle className="w-3 h-3 mr-1" />
